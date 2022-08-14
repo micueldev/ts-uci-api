@@ -1,0 +1,42 @@
+version: "3"
+networks:
+  uci:
+volumes:
+  mysql-data:
+
+services:
+  uci-server:
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        app_port: ${PORT}
+        debug_port: ${DEBUG_PORT}
+    command: npm run debug
+    container_name: app-server
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - 3000:${PORT}
+      - 9229:${DEBUG_PORT}
+    networks:
+      - uci
+
+  mysql:
+    image: mysql:8.0
+    container_name: uci-mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=UCI
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_USER=uci
+      - MYSQL_PASSWORD=uci
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - uci
