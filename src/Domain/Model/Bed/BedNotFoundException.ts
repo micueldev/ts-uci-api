@@ -1,15 +1,11 @@
-import ObjectNotFoundException from "../../Exception/ObjectNotFoundException";
+import ObjectNotFoundException from '@/Domain/Exception/ObjectNotFoundException';
 
+class BedNotFoundException extends ObjectNotFoundException {
+  private readonly NAME = 'Bed';
 
-class BedNotFoundException extends ObjectNotFoundException
-{
-    private readonly NAME = 'Bed';
-
-    public getObjectName(): string
-    {
-        return this.NAME;
-    }
+  public getObjectName(): string {
+    return this.NAME;
+  }
 }
-
 
 export default BedNotFoundException;

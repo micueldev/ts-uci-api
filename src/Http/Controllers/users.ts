@@ -2,88 +2,76 @@ import { Request, Response, NextFunction } from 'express';
 import HttpStatus from 'http-status';
 import { Container } from 'typedi';
 
-import UserService from '../../Domain/Service/User/UserService';
-import UserCriteria from '../../Domain/Model/User/UserCriteria';
-import UserTransformer, { PostUserProps, PutUserProps } from '../Model/User/UserTransformer';
-import UserCriteriaTransformer from '../Model/User/UserCriteriaTransformer';
-import PaginatedUsersOutput from '../Model/User/PaginatedUsersOutput';
+import UserService from '@/Domain/Service/User/UserService';
+import UserCriteria from '@/Domain/Model/User/UserCriteria';
+import UserTransformer, {
+  PostUserProps,
+  PutUserProps,
+} from '@/Http/Model/User/UserTransformer';
+import UserCriteriaTransformer from '@/Http/Model/User/UserCriteriaTransformer';
+import PaginatedUsersOutput from '@/Http/Model/User/PaginatedUsersOutput';
 
+const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userCriteria = UserCriteriaTransformer.createCriteriaFromQuery(
+      req.query,
+    );
 
-const getUsers = async( req: Request , res: Response, next: NextFunction ) => {
+    const userService = Container.get(UserService);
 
-    try {
-        const userCriteria = UserCriteriaTransformer.createCriteriaFromQuery(req.query);
+    const users = await userService.getUsers(userCriteria);
 
-        const userService = Container.get(UserService);
+    res.json(new PaginatedUsersOutput(users, userCriteria));
+  } catch (err) {
+    next(err);
+  }
+};
 
-        const users = await userService.getUsers(userCriteria);
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const userService = Container.get(UserService);
 
-        res.json(new PaginatedUsersOutput(users, userCriteria));
-        
-    } catch (err) {
-        next(err);
-    }
-}
+    const user = await userService.getUser(UserCriteria.createById(+id));
 
-const getUser = async( req: Request , res: Response, next: NextFunction ) => {
+    res.json(UserTransformer.userToDefaultOutput(user));
+  } catch (err) {
+    next(err);
+  }
+};
 
-    try {
-        const { id } = req.params;
-        const userService = Container.get(UserService);
+const postUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { body }: { body: PostUserProps } = req;
 
-        const user = await userService.getUser(
-            UserCriteria.createById(+id)
-        );
+    let user = UserTransformer.postBodyToUser(body);
 
-        res.json(UserTransformer.userToDefaultOutput(user));
+    const userService = Container.get(UserService);
 
-    } catch (err) {
-        next(err);
-    }
-}
+    user = await userService.createUser(user);
 
-const postUser = async( req: Request , res: Response, next: NextFunction ) => {
+    res.status(HttpStatus.CREATED).json({ id: user.id });
+  } catch (err) {
+    next(err);
+  }
+};
 
-    try {
-        const { body }: { body: PostUserProps } = req;
+const putUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { body }: { body: PutUserProps } = req;
 
-        let user = UserTransformer.postBodyToUser(body);
+    let user = UserTransformer.putBodyToUser(body);
+    user.id = +id;
 
-        const userService = Container.get(UserService);
+    const userService = Container.get(UserService);
 
-        user = await userService.createUser(user);
+    user = await userService.updateUser(user);
 
-        res.status(HttpStatus.CREATED).json( {id: user.id} );
+    res.status(HttpStatus.NO_CONTENT).json();
+  } catch (err) {
+    next(err);
+  }
+};
 
-    } catch (err) {
-        next(err);
-    }
-}
-
-const putUser = async( req: Request , res: Response, next: NextFunction ) => {
-
-    try {
-        const { id } = req.params;
-        const { body }: { body: PutUserProps } = req;
-
-        let user = UserTransformer.putBodyToUser(body);
-        user.id = +id;
-
-        const userService = Container.get(UserService);
-
-        user = await userService.updateUser(user);
-
-        res.status(HttpStatus.NO_CONTENT).json();
-
-    } catch (err) {
-        next(err);
-    }   
-}
-
-
-export {
-    getUsers,
-    getUser,
-    postUser,
-    putUser
-}
+export { getUsers, getUser, postUser, putUser };

@@ -2,104 +2,86 @@ import { Request, Response, NextFunction } from 'express';
 import HttpStatus from 'http-status';
 import { Container } from 'typedi';
 
-import BedService from '../../Domain/Service/Bed/BedService';
-import BedCriteria from '../../Domain/Model/Bed/BedCriteria';
-import BedTransformer, { BedProps } from '../Model/Bed/BedTransformer';
-import BedCriteriaTransformer from '../Model/Bed/BedCriteriaTransformer';
-import PaginatedBedsOutput from '../Model/Bed/PaginatedBedsOutput';
+import BedService from '@/Domain/Service/Bed/BedService';
+import BedCriteria from '@/Domain/Model/Bed/BedCriteria';
+import BedTransformer, { BedProps } from '@/Http/Model/Bed/BedTransformer';
+import BedCriteriaTransformer from '@/Http/Model/Bed/BedCriteriaTransformer';
+import PaginatedBedsOutput from '@/Http/Model/Bed/PaginatedBedsOutput';
 
+const getBeds = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const bedCriteria = BedCriteriaTransformer.createCriteriaFromQuery(
+      req.query,
+    );
 
-const getBeds = async( req: Request , res: Response, next: NextFunction ) => {
+    const bedService = Container.get(BedService);
 
-    try {
-        const bedCriteria = BedCriteriaTransformer.createCriteriaFromQuery(req.query);
+    const beds = await bedService.getBeds(bedCriteria);
 
-        const bedService = Container.get(BedService);
+    res.json(new PaginatedBedsOutput(beds, bedCriteria));
+  } catch (err) {
+    next(err);
+  }
+};
 
-        const beds = await bedService.getBeds(bedCriteria);
+const getBed = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const bedService = Container.get(BedService);
 
-        res.json(new PaginatedBedsOutput(beds, bedCriteria));
-        
-    } catch (err) {
-        next(err);
-    }
-}
+    const bed = await bedService.getBed(BedCriteria.createById(+id));
 
-const getBed = async( req: Request , res: Response, next: NextFunction ) => {
+    res.json(BedTransformer.bedToDefaultOutput(bed));
+  } catch (err) {
+    next(err);
+  }
+};
 
-    try {
-        const { id } = req.params;
-        const bedService = Container.get(BedService);
+const postBed = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { body }: { body: BedProps } = req;
 
-        const bed = await bedService.getBed(
-            BedCriteria.createById(+id)
-        );
+    let bed = BedTransformer.bodyToBed(body);
 
-        res.json(BedTransformer.bedToDefaultOutput(bed));
+    const bedService = Container.get(BedService);
 
-    } catch (err) {
-        next(err);
-    }
-}
+    bed = await bedService.createBed(bed);
 
-const postBed = async( req: Request , res: Response, next: NextFunction ) => {
+    res.status(HttpStatus.CREATED).json({ id: bed.id });
+  } catch (err) {
+    next(err);
+  }
+};
 
-    try {
-        const { body }: { body: BedProps } = req;
+const putBed = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { body }: { body: BedProps } = req;
 
-        let bed = BedTransformer.bodyToBed(body);
+    let bed = BedTransformer.bodyToBed(body);
+    bed.id = +id;
 
-        const bedService = Container.get(BedService);
+    const bedService = Container.get(BedService);
 
-        bed = await bedService.createBed(bed);
+    bed = await bedService.updateBed(bed);
 
-        res.status(HttpStatus.CREATED).json( {id: bed.id} );
+    res.status(HttpStatus.NO_CONTENT).json();
+  } catch (err) {
+    next(err);
+  }
+};
 
-    } catch (err) {
-        next(err);
-    }
-}
+const deleteBed = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const bedService = Container.get(BedService);
 
-const putBed = async( req: Request , res: Response, next: NextFunction ) => {
+    await bedService.deleteBed(+id);
 
-    try {
-        const { id } = req.params;
-        const { body }: { body: BedProps } = req;
+    res.status(HttpStatus.NO_CONTENT).json();
+  } catch (err) {
+    next(err);
+  }
+};
 
-        let bed = BedTransformer.bodyToBed(body);
-        bed.id = +id;
-
-        const bedService = Container.get(BedService);
-
-        bed = await bedService.updateBed(bed);
-
-        res.status(HttpStatus.NO_CONTENT).json();
-
-    } catch (err) {
-        next(err);
-    }   
-}
-
-const deleteBed = async( req: Request , res: Response, next: NextFunction ) => {
-
-    try {
-        const { id } = req.params;
-        const bedService = Container.get(BedService);
-
-        await bedService.deleteBed(+id);
-
-        res.status(HttpStatus.NO_CONTENT).json();
-
-    } catch (err) {
-        next(err);
-    }
-}
-
-
-export {
-    getBeds,
-    getBed,
-    postBed,
-    putBed,
-    deleteBed
-}
+export { getBeds, getBed, postBed, putBed, deleteBed };

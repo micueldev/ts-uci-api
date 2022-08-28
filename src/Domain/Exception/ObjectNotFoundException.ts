@@ -1,20 +1,15 @@
+abstract class ObjectNotFoundException extends Error {
+  private readonly STATUS = 404;
 
-abstract class ObjectNotFoundException extends Error
-{
-    private readonly STATUS = 404;
+  public getStatus(): number {
+    return this.STATUS;
+  }
 
-    public getStatus(): number
-    {
-        return this.STATUS;
-    }   
+  public getMessage(): string {
+    return `${this.getObjectName()} not found`;
+  }
 
-    public getMessage(): string
-    {
-        return `${this.getObjectName()} not found`;
-    }   
-    
-    public abstract getObjectName(): string;
+  public abstract getObjectName(): string;
 }
-
 
 export default ObjectNotFoundException;

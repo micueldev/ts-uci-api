@@ -1,41 +1,46 @@
 {
-    // Use IntelliSense to learn about possible Node.js debug attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Docker",
-            "preLaunchTask": "tsc-watch",
-            "port": 9229,
-            "restart": true,
-            "timeout": 600000,
-			"sourceMaps": true,
-            "localRoot": "${workspaceFolder}/dist",
-            "remoteRoot": "/app/dist",
-            "skipFiles": ["<node_internals>/**/*.js"],
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Local Nodemon",
-            "preLaunchTask": "tsc-watch",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run",
-                "debug"
-            ],
-            "restart": true,
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
-        }
-    ]
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Docker",
+      "preLaunchTask": "tsc-watch",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "timeout": 600000,
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**/*.js"],
+      "sourceMaps": true,
+      "localRoot": "${workspaceFolder}/dist",
+      "remoteRoot": "/app/dist",
+      "type": "node"
+    },
+    {
+      "name": "Attach to Local Debug",
+      "preLaunchTask": "tsc-watch",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "timeout": 60000,
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
+    {
+      "name": "Run Local Debug",
+      "preLaunchTask": "tsc-watch",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "debug"],
+      "restart": true,
+      "timeout": 60000,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    }
+  ]
 }

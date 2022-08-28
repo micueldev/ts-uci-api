@@ -1,27 +1,26 @@
-import UserCriteria from '../../../Domain/Model/User/UserCriteria';
-import { applySorting, applyPagination } from '../CriteriaTransformer';
+import UserCriteria from '@/Domain/Model/User/UserCriteria';
+import {
+  applySorting,
+  applyPagination,
+} from '@/Http/Model/CriteriaTransformer';
 
+class UserCriteriaTransformer {
+  public static createCriteriaFromQuery(query: any): UserCriteria {
+    const userCriteria = UserCriteria.createEmpty();
 
-class UserCriteriaTransformer
-{
-    public static createCriteriaFromQuery(query: any): UserCriteria
-    {
-        let userCriteria = UserCriteria.createEmpty();
-
-        if(query.hasOwnProperty('username')){
-            userCriteria.filterByUsername(query.username);
-        }
-
-        if(query.hasOwnProperty('email')){
-            userCriteria.filterByUsername(query.email);
-        }
-
-        applySorting(query, userCriteria);
-        applyPagination(query, userCriteria);
-
-        return userCriteria;
+    if (Object.prototype.hasOwnProperty.call(query, 'username')) {
+      userCriteria.filterByUsername(query.username);
     }
-}
 
+    if (Object.prototype.hasOwnProperty.call(query, 'email')) {
+      userCriteria.filterByEmail(query.email);
+    }
+
+    applySorting(query, userCriteria);
+    applyPagination(query, userCriteria);
+
+    return userCriteria;
+  }
+}
 
 export default UserCriteriaTransformer;

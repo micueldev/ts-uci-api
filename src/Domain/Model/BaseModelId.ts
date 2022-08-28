@@ -1,8 +1,5 @@
-
-abstract class BaseModelId
-{
-    public id: number|null = null;
+abstract class BaseModelId {
+  public id: number | null = null;
 }
-
 
 export default BaseModelId;
