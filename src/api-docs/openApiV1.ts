@@ -3,6 +3,7 @@ import base from '@/api-docs/v1/base';
 import auth from '@/api-docs/v1/auth';
 import user from '@/api-docs/v1/user';
 import bed from '@/api-docs/v1/bed';
+import patient from '@/api-docs/v1/person/patient';
 
 const openApiV1 = {
   openapi: '3.0.0',
@@ -46,11 +47,18 @@ const openApiV1 = {
     {
       name: 'bed',
     },
+    {
+      name: 'person',
+    },
+    {
+      name: 'patient',
+    },
   ],
   paths: {
     ...auth.paths,
     ...user.paths,
     ...bed.paths,
+    ...patient.paths,
   },
   components: {
     securitySchemes: {
@@ -65,12 +73,14 @@ const openApiV1 = {
       ...auth.schemas,
       ...user.schemas,
       ...bed.schemas,
+      ...patient.schemas,
     },
     examples: {
       ...base.examples,
       ...auth.examples,
       ...user.examples,
       ...bed.examples,
+      ...patient.examples,
     },
     parameters: {
       ...base.parameters,

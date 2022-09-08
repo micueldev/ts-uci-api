@@ -24,6 +24,7 @@ describe('Test UserRepository', () => {
   it('test get not found', async () => {
     try {
       await userRepository.findOneUserBy(UserCriteria.createById(1));
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new UserNotFoundException());
     }
@@ -75,6 +76,7 @@ describe('Test UserRepository', () => {
       const user = UserFactory.createNewUser({});
       user.id = 1;
       await userRepository.updateUser(user);
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new UserNotFoundException());
     }

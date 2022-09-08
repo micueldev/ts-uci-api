@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { Service } from 'typedi';
+import { Op } from 'sequelize';
 
 import BedModel from '@/DB/Model/Bed/BedModel';
 import CommonCriteriaBuilder from '@/DB/Model/CommonCriteriaBuilder';
@@ -103,12 +104,12 @@ class BedRepository implements IBedRepository {
     const query = CommonCriteriaBuilder.buildCommonCriteria(bedCriteria);
 
     if (!bedCriteria.showDeleted()) {
-      query.where.deletedAt = null;
+      query.where[Op.and].push({ deletedAt: null });
     }
 
     const name = bedCriteria.getName();
     if (name) {
-      query.where.name = name;
+      query.where[Op.and].push({ name });
     }
 
     return query;

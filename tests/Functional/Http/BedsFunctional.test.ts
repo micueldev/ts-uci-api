@@ -98,7 +98,7 @@ describe('Test Functional Bed', () => {
 
     const loginResponse = await base.loginAs(app, userRepository);
 
-    const res = await base.getBed(app, loginResponse.body.id, loginResponse);
+    const res = await base.getBed(app, bed.id!, loginResponse);
     base.expectOk(res);
     base.expectTypeJson(res);
 
@@ -113,7 +113,7 @@ describe('Test Functional Bed', () => {
     const loginResponse = await base.loginAs(app, userRepository);
 
     const res = await base.getBed(app, 99999, loginResponse);
-    base.expectOkNotFound(res);
+    base.expectNotFound(res);
     base.expectTypeJson(res);
   });
 
@@ -237,7 +237,7 @@ describe('Test Functional Bed', () => {
     const loginResponse = await base.loginAs(app, userRepository);
 
     const res = await base.updateBed(app, 43434, {}, loginResponse);
-    base.expectOkNotFound(res);
+    base.expectNotFound(res);
     base.expectTypeJson(res);
   });
 
@@ -319,7 +319,7 @@ describe('Test Functional Bed', () => {
     const loginResponse = await base.loginAs(app, userRepository);
 
     const res = await base.deleteBed(app, 43434, loginResponse);
-    base.expectOkNotFound(res);
+    base.expectNotFound(res);
     base.expectTypeJson(res);
   });
 

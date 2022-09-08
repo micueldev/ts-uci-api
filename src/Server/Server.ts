@@ -9,6 +9,7 @@ import { env } from '@/Server/Configs/enviroment';
 import authRoutes from '@/Http/Routes/auth';
 import userRoutes from '@/Http/Routes/user';
 import bedRoutes from '@/Http/Routes/bed';
+import patientPersonRoutes from '@/Http/Routes/person/patient';
 import errorHandler from '@/Http/Middlewares/errorHandler';
 import openApiV1 from '@/api-docs/openApiV1';
 
@@ -19,6 +20,7 @@ class Server {
     auth: '/api/v1/auth',
     users: '/api/v1/users',
     beds: '/api/v1/beds',
+    patientpersons: '/api/v1/person/patients',
   };
 
   constructor() {
@@ -57,6 +59,7 @@ class Server {
     this.app.use(this.apiV1Paths.auth, authRoutes);
     this.app.use(this.apiV1Paths.users, userRoutes);
     this.app.use(this.apiV1Paths.beds, bedRoutes);
+    this.app.use(this.apiV1Paths.patientpersons, patientPersonRoutes);
   }
 
   afterMiddlewares() {

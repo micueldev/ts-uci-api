@@ -29,7 +29,7 @@ export const expectNotAuthorized = (res: Response) => {
   expect(res.statusCode).toEqual(401);
 };
 
-export const expectOkNotFound = (res: Response) => {
+export const expectNotFound = (res: Response) => {
   expect(res.statusCode).toEqual(404);
 };
 

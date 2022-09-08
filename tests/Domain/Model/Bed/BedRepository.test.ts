@@ -24,6 +24,7 @@ describe('Test BedRepository', () => {
   it('test get not found', async () => {
     try {
       await bedRepository.findOneBedBy(BedCriteria.createById(1));
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }
@@ -65,6 +66,7 @@ describe('Test BedRepository', () => {
       const bed = BedFactory.createNewBed({});
       bed.id = 1;
       await bedRepository.updateBed(bed);
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }
@@ -77,6 +79,7 @@ describe('Test BedRepository', () => {
 
     try {
       await bedRepository.findOneBedBy(BedCriteria.createById(bed.id!));
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }
@@ -89,6 +92,7 @@ describe('Test BedRepository', () => {
 
     try {
       await bedRepository.findOneBedBy(BedCriteria.createById(bed.id!));
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }
@@ -101,6 +105,7 @@ describe('Test BedRepository', () => {
 
     try {
       await bedRepository.deleteBedById(bed.id!);
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }
@@ -109,6 +114,7 @@ describe('Test BedRepository', () => {
   it('test delete not found', async () => {
     try {
       await bedRepository.deleteBedById(1234);
+      throw new Error('Bad test');
     } catch (err) {
       expect(err).toMatchObject(new BedNotFoundException());
     }

@@ -1,3 +1,5 @@
+import { Op } from 'sequelize';
+
 import Criteria from '@/Domain/Model/Criteria';
 import CriteriaWithId from '@/Domain/Model/CriteriaWithId';
 
@@ -8,16 +10,16 @@ class CommonCriteriaBuilder {
   ): any {
     const query: any = {};
 
-    const where: any = {};
+    const where: any = { [Op.and]: [] };
     if (criteria instanceof CriteriaWithId) {
       const id = criteria.getId();
       if (id) {
-        where.id = id;
+        where[Op.and].push({ id });
       }
 
       const ids = criteria.getIds();
       if (ids && ids.length) {
-        where.id = ids;
+        where[Op.and].push({ id: ids });
       }
 
       query.where = where;

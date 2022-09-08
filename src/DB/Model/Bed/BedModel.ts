@@ -45,6 +45,14 @@ BedModel.init(
     modelName: 'Bed',
     tableName: 'bed',
     timestamps: false,
+    indexes: [
+      {
+        name: 'name_index',
+        using: 'BTREE',
+        unique: false,
+        fields: ['name'],
+      },
+    ],
   },
 );
 

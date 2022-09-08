@@ -115,7 +115,7 @@ describe('Test Functional User', () => {
     const loginResponse = await base.loginAs(app, userRepository);
 
     const res = await base.getUser(app, 99999, loginResponse);
-    base.expectOkNotFound(res);
+    base.expectNotFound(res);
     base.expectTypeJson(res);
   });
 
@@ -255,7 +255,7 @@ describe('Test Functional User', () => {
     const loginResponse = await base.loginAs(app, userRepository);
 
     const res = await base.updateUser(app, 43434, {}, loginResponse);
-    base.expectOkNotFound(res);
+    base.expectNotFound(res);
     base.expectTypeJson(res);
   });
 

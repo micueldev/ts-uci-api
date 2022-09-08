@@ -17,13 +17,13 @@ export interface PutUserProps {
 }
 
 interface DefaultUserOutputProps {
-  id: number | null;
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
   email: string;
-  created_at: string | null;
-  updated_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 class UserTransformer {
@@ -50,7 +50,7 @@ class UserTransformer {
 
   public static userToDefaultOutput(user: User): DefaultUserOutputProps {
     return {
-      id: user.id,
+      id: user.id!,
       username: user.username,
       first_name: user.firstName,
       last_name: user.lastName,

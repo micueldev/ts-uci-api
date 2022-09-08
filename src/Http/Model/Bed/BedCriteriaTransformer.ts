@@ -6,16 +6,16 @@ import {
 
 class BedCriteriaTransformer {
   public static createCriteriaFromQuery(query: any): BedCriteria {
-    const userCriteria = BedCriteria.createEmpty();
+    const bedCriteria = BedCriteria.createEmpty();
 
     if (Object.prototype.hasOwnProperty.call(query, 'name')) {
-      userCriteria.filterByName(query.name);
+      bedCriteria.filterByName(query.name);
     }
 
-    applySorting(query, userCriteria);
-    applyPagination(query, userCriteria);
+    applySorting(query, bedCriteria);
+    applyPagination(query, bedCriteria);
 
-    return userCriteria;
+    return bedCriteria;
   }
 }
 

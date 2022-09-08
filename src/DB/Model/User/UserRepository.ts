@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { Service } from 'typedi';
+import { Op } from 'sequelize';
 
 import UserModel from '@/DB/Model/User/UserModel';
 import User from '@/Domain/Model/User/User';
@@ -122,12 +123,12 @@ class UserRepository implements IUserRepository {
 
     const username = userCriteria.getUsername();
     if (username) {
-      query.where.username = username;
+      query.where[Op.and].push({ username });
     }
 
     const email = userCriteria.getEmail();
     if (email) {
-      query.where.email = email;
+      query.where[Op.and].push({ email });
     }
 
     return query;

@@ -7,11 +7,11 @@ export interface BedProps {
 }
 
 interface DefaultBedOutputProps {
-  id: number | null;
+  id: number;
   name: string;
   description: string | null;
-  created_at: string | null;
-  updated_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 class BedTransformer {
@@ -25,7 +25,7 @@ class BedTransformer {
 
   public static bedToDefaultOutput(bed: Bed): DefaultBedOutputProps {
     return {
-      id: bed.id,
+      id: bed.id!,
       name: bed.name,
       description: bed.description,
       created_at: DateFormatter.format(bed.createdAt),
